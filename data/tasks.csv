@@ -1,0 +1,6 @@
+id,garden_id,bed_id,description,due_date,status,priority,created_at,updated_at
+t1,g1,b1,Water the vegetables,2023-01-05,open,high,2023-01-01T10:00:00Z,2023-01-01T10:00:00Z
+t2,g1,b2,Weed the herb bed,2023-01-06,open,medium,2023-01-01T11:00:00Z,2023-01-01T11:00:00Z
+t3,g2,b3,Fertilize the flowers,2023-01-07,completed,low,2023-01-02T12:00:00Z,2023-01-02T12:00:00Z
+t4,g3,b4,Harvest the vegetables,2023-01-08,open,high,2023-01-03T14:00:00Z,2023-01-03T14:00:00Z
+t5,g3,,Check soil pH,2023-01-09,open,medium,2023-01-03T15:00:00Z,2023-01-03T15:00:00Z

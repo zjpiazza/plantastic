@@ -1,0 +1,4 @@
+id,name,location,description,created_at,updated_at
+g1,Backyard Garden,"45.523, -122.676","A small vegetable and herb garden",2023-01-01T10:00:00Z,2023-01-01T10:00:00Z
+g2,Balcony Garden,"45.524, -122.677","A collection of potted flowers",2023-01-02T12:00:00Z,2023-01-02T12:00:00Z
+g3,Community Garden,"45.525, -122.678","A shared garden space for the neighborhood",2023-01-03T14:00:00Z,2023-01-03T14:00:00Z
