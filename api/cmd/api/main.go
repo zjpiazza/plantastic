@@ -10,8 +10,8 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
-	"github.com/zjpiazza/plantastic/internal/models"
-	"github.com/zjpiazza/plantastic/internal/routes"
+	"github.com/zjpiazza/plantastic/api/internal/routes"
+	"github.com/zjpiazza/plantastic/pkg/models"
 )
 
 func main() {
@@ -33,13 +33,13 @@ func main() {
 	fmt.Println("Database migration complete")
 
 	// Load Gardens
-	loadGardens(db, "data/gardens.csv")
+	// loadGardens(db, "data/gardens.csv")
 
 	// Load Beds
-	loadBeds(db, "data/beds.csv")
+	// loadBeds(db, "data/beds.csv")
 
 	// Load Tasks
-	loadTasks(db, "data/tasks.csv")
+	// loadTasks(db, "data/tasks.csv")
 
 	// Initialize handlers, passing the db connection
 	router := routes.SetupRoutes(db) // Pass the db to SetupRoutes

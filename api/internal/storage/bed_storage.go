@@ -3,7 +3,7 @@ package storage
 import (
 	"errors"
 
-	"github.com/zjpiazza/plantastic/internal/models"
+	"github.com/zjpiazza/plantastic/pkg/models"
 	"gorm.io/gorm"
 )
 

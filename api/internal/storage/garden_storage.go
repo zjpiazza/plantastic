@@ -3,10 +3,11 @@ package storage
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 
-	"github.com/zjpiazza/plantastic/internal/models"
+	"github.com/zjpiazza/plantastic/pkg/models"
 	"gorm.io/gorm"
 )
 
@@ -44,23 +45,30 @@ func GetGardenByID(db *gorm.DB, gardenID string) (models.Garden, error) {
 }
 
 func UpdateGarden(db *gorm.DB, garden *models.Garden) error {
-	if garden.Name == "" {
-		return ErrValidation
-	}
-
 	var existingGarden models.Garden
 	if err := db.First(&existingGarden, "id = ?", garden.ID).Error; err != nil {
+		fmt.Println("First error")
 		return ParseDatabaseError(err)
 	}
 
-	result := db.Save(garden)
+	// Use a map to specify which fields to update
+	updateFields := map[string]interface{}{
+		"name":        garden.Name,
+		"description": garden.Description,
+		"location":    garden.Location,
+		"updated_at":  time.Now(),
+	}
+
+	result := db.Model(&models.Garden{}).Where("id = ?", garden.ID).Updates(updateFields)
 	if result.Error != nil {
+		fmt.Println("Second error: ", result.Error)
 		return ParseDatabaseError(result.Error)
 	}
 	return nil
 }
 
 func DeleteGarden(db *gorm.DB, gardenID string) error {
+	fmt.Println("Deleting garden: ", gardenID)
 	result := db.Where("id = ?", gardenID).Delete(&models.Garden{})
 	if result.Error != nil {
 		return ParseDatabaseError(result.Error)
@@ -137,7 +145,12 @@ func GetGardensByQuery(db *gorm.DB, params map[string]string) ([]models.Garden, 
 	var gardens []models.Garden
 
 	// Validate query parameters
-	allowedParams := map[string]bool{"name": true, "createdStart": true, "createdEnd": true, "size": true}
+	allowedParams := map[string]bool{
+		"name":         true,
+		"createdStart": true,
+		"createdEnd":   true,
+		"size":         true,
+	}
 	for key := range params {
 		if !allowedParams[key] {
 			return nil, ErrInvalidQuery

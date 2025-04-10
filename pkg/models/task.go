@@ -8,7 +8,7 @@ type Task struct {
 	GardenID    string    `json:"garden_id"`     // Foreign key to Garden
 	BedID       *string   `json:"garden_bed_id"` // Foreign key to Bed (nullable)
 	Description string    `json:"description"`
-	DueDate     string    `json:"due_date"`
+	DueDate     time.Time `json:"due_date"`
 	Status      string    `json:"status"`
 	Priority    string    `json:"priority"`
 	CreatedAt   time.Time `json:"created_at"`

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zjpiazza/plantastic/internal/models"
-	"github.com/zjpiazza/plantastic/internal/storage"
+	"github.com/zjpiazza/plantastic/api/internal/storage"
+	"github.com/zjpiazza/plantastic/pkg/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -547,7 +547,6 @@ func TestTransactionErrors(t *testing.T) {
 	})
 
 	err := storage.CreateGardenWithTransaction(db, &garden, beds)
-
 	// Add debug output to help diagnose the issue
 	if err != nil {
 		t.Logf("Got error type: %T, error message: %q", err, err.Error())

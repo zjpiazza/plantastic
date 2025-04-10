@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/zjpiazza/plantastic/internal/models"
+	"github.com/zjpiazza/plantastic/pkg/models"
 	"gorm.io/gorm"
 )
 
@@ -105,7 +105,7 @@ func loadTasks(db *gorm.DB, filePath string) {
 			GardenID:    record[1],
 			BedID:       &record[2], // Nullable field
 			Description: record[3],
-			DueDate:     dueDate.Format("2006-01-02"),
+			DueDate:     dueDate,
 			Status:      record[5],
 			Priority:    record[6],
 			CreatedAt:   createdAt,
