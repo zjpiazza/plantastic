@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://github.com/yourusername/plantastic">
+  <a href="https://github.com/zjpiazza/plantastic">
     <img src="./assets/logo-pixelated.png" alt="Logo">
   </a>
 
