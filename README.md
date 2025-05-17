@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/zjpiazza/plantastic">
-    <img src="./assets/logo-pixelated.png" alt="Logo">
+    <img src="assets/logo-pixelated.png" alt="Logo">
   </a>
 
 <h3 align="center">🌱 Plantastic</h3>
