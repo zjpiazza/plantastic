@@ -1,5 +1,0 @@
-id,garden_id,name,type,size,soil_type,notes,created_at,updated_at
-b1,g1,Vegetable Bed,raised,"4x8",loamy,"Good drainage",2023-01-01T10:00:00Z,2023-01-01T10:00:00Z
-b2,g1,Herb Bed,in-ground,"3x3",sandy,"Needs more compost",2023-01-01T11:00:00Z,2023-01-01T11:00:00Z
-b3,g2,Flower Bed,container,"2x4",clay,"Needs amendment",2023-01-02T12:00:00Z,2023-01-02T12:00:00Z
-b4,g3,Shared Vegetable Bed,raised,"5x10",loamy,"Shared by the community",2023-01-03T14:00:00Z,2023-01-03T14:00:00Z

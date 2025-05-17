@@ -1,0 +1,54 @@
+version: '3'
+dotenv: ['.env']
+vars:
+  WEB_PORT: '8080'
+  API_PORT: '8000'
+  SSH_PORT: '23236'
+
+tasks:
+  build:
+    desc: Build all applications
+    cmds:
+      - go build -o bin/web ./cmd/web/
+      - go build -o bin/api ./cmd/api/
+      - go build -o bin/tui ./cmd/tui/
+
+  web:
+    desc: Run the web server with Air
+    cmds:
+      - air -c .air.web.toml
+    env:
+      PORT: '{{.WEB_PORT}}'
+      CLERK_SECRET_KEY: '{{.CLERK_SECRET_KEY}}'
+      CLERK_PUBLISHABLE_KEY: '{{.CLERK_PUBLISHABLE_KEY}}'
+
+  api:
+    desc: Run the API server with Air
+    cmds:
+      - air -c .air.api.toml
+    env:
+      PORT: '{{.API_PORT}}'
+      CLERK_SECRET_KEY: '{{.CLERK_SECRET_KEY}}'
+
+  tui:
+    desc: Run the TUI application with Air
+    cmds:
+      - air -c .air.tui.toml
+    env:
+      SSH_PORT: '{{.SSH_PORT}}'
+
+  dev:
+    desc: Run all services concurrently in development mode
+    deps: [install-tools]
+    cmds:
+      - task: web
+      - task: api
+      - task: tui
+    concurrent: true
+
+  install-tools:
+    desc: Install development tools
+    cmds:
+      - go install github.com/cosmtrek/air@latest
+    status:
+      - which air

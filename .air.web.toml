@@ -1,0 +1,31 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o ./tmp/web ./cmd/web"
+bin = "./tmp/web"
+include_ext = ["go", "html"]
+exclude_dir = ["tmp", "vendor", "bin"]
+delay = 1000
+kill_delay = "0.5s"
+log = "build-errors.log"
+send_interrupt = false
+stop_on_error = true
+
+[log]
+time = true
+
+[color]
+main = "yellow"
+watcher = "cyan"
+build = "green"
+runner = "magenta"
+
+[misc]
+clean_on_exit = true
+
+[screen]
+clear_on_rebuild = true
+
+[env]
+CLERK_SECRET_KEY = "${CLERK_SECRET_KEY}"

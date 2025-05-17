@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verify Device - Plantastic</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Clerk SDK: Use your actual values for data-clerk-publishable-key and data-clerk-frontend-api -->
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="{{.ClerkPublishableKey}}"
+    data-clerk-frontend-api="{{.ClerkFrontendAPI}}"
+    src="https://{{.ClerkFrontendAPI}}/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+    type="text/javascript"
+  ></script>
+</head>
+<body class="bg-gray-50">
+  <nav class="bg-green-600 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="/" class="text-2xl font-bold">Plantastic</a>
+    </div>
+  </nav>
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-md mx-auto">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">Verify Device</h2>
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="text-center mb-6">
+          <p class="text-lg font-medium text-gray-900">
+            Code: <span class="font-mono">{{.Code}}</span>
+          </p>
+          <p class="text-sm text-gray-500 mt-2">
+            Please sign in to link your device
+          </p>
+        </div>
+        <div id="clerk-sign-in"></div>
+        <div id="success" class="hidden">
+          <div class="text-center p-4 bg-green-50 rounded-md">
+            <svg class="mx-auto h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <p class="mt-2 text-lg font-medium text-green-600">Device Linked Successfully!</p>
+            <p class="mt-1 text-sm text-green-500">You can now return to your terminal.</p>
+          </div>
+        </div>
+        <div id="error" class="hidden text-red-600 text-sm text-center mt-4"></div>
+      </div>
+    </div>
+  </main>
+  <script>
+    // These will be replaced by your Go template
+    const userCodeFromGo = '{{.Code}}';
+
+    const clerkSignInDiv = document.getElementById('clerk-sign-in');
+    const successDiv = document.getElementById('success');
+    const errorDiv = document.getElementById('error');
+    const staticMessageDiv = document.querySelector('.text-center.mb-6');
+
+    function showError(message) {
+      if (errorDiv) {
+        errorDiv.textContent = message;
+        if (message) {
+          errorDiv.classList.remove('hidden');
+        } else {
+          errorDiv.classList.add('hidden');
+        }
+      }
+    }
+
+    function showSuccess() {
+      if (successDiv) {
+        successDiv.classList.remove('hidden');
+      }
+    }
+
+    async function attemptDeviceLink(userCode, clerkToken) {
+      showError('');
+      console.log("Attempting to link device via API. UserCode:", userCode, "ClerkToken variable present?", clerkToken ? "Yes" : "No/Empty");
+      console.log("Actual clerkToken value before fetch:", clerkToken);
+
+      try {
+        const apiResponse = await fetch('http://localhost:8000/device/link', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${clerkToken}`
+          },
+          body: JSON.stringify({
+            user_code: userCode,
+            clerk_session_token: clerkToken
+          })
+        });
+
+        if (apiResponse.ok) {
+          const result = await apiResponse.json();
+          if (clerkSignInDiv) clerkSignInDiv.style.display = 'none';
+          if (staticMessageDiv) staticMessageDiv.style.display = 'none';
+          showSuccess();
+        } else {
+          const errorResult = await apiResponse.json();
+          throw new Error(errorResult.error || `Failed to link device (status ${apiResponse.status})`);
+        }
+      } catch (err) {
+        showError(err.message);
+      }
+    }
+
+    window.addEventListener('load', async function () {
+      await Clerk.load();
+
+      if (Clerk.user) {
+        // User is signed in, get token and link device
+        const token = await Clerk.session.getToken();
+        if (token) {
+          if (staticMessageDiv) staticMessageDiv.style.display = 'none';
+          if (clerkSignInDiv) clerkSignInDiv.style.display = 'none';
+          await attemptDeviceLink(userCodeFromGo, token);
+        }
+      } else {
+        // Not signed in, show sign-in
+        Clerk.mountSignIn(clerkSignInDiv);
+
+        // Listen for sign-in
+        Clerk.addListener(async ({ type }) => {
+          if (type === 'userSignedIn') {
+            const token = await Clerk.session.getToken();
+            if (token) {
+              if (staticMessageDiv) staticMessageDiv.style.display = 'none';
+              if (clerkSignInDiv) clerkSignInDiv.style.display = 'none';
+              await attemptDeviceLink(userCodeFromGo, token);
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

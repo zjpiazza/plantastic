@@ -24,7 +24,7 @@ import (
 	bm "github.com/charmbracelet/wish/bubbletea"
 	lm "github.com/charmbracelet/wish/logging"
 
-	"github.com/zjpiazza/plantastic/pkg/models"
+	"github.com/zjpiazza/plantastic/internal/models"
 )
 
 // Define custom tabs component since the bubbles/tabs package might not be available
